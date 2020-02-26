@@ -1,64 +1,22 @@
-import EventEmitter from 'events'
+import Component from '../Base/Component'
 
-export default class Hero extends EventEmitter {
+export default class Hero extends Component {
 
-    constructor(options) {
-        super()
-        // this.el = options.el
-        this.element = this.getElement();
-        this.data = this.initData();
-        this.props = this.initProps();
-        this.render()
-    }
-
-    initData() {
+    data() {
         return {
             text: 'this is the TEXT!!!!'
         }
     }
 
-    initProps() {
-
-        let dataSet = this.element.dataset;
-
-        let props = [];
-
-        for (const x in dataSet) {
-            if (dataSet.hasOwnProperty(x)) {
-                const prop = dataSet[x];
-
-                if (x.indexOf('tim') === 0) {
-
-                    let formattedKey = x.replace('tim', '');
-
-                    props[formattedKey[0].toLowerCase() + formattedKey.substr(1)] = prop;
-
-                }
-
-            }
-        }
-
-        return props;
-    }
-
-    getElement() {
-        return document.querySelector('[role=hero]');
-    }
-
-    render() {
-
-        console.log('props', this.props);
-
-        this.element.innerHTML = this.markup();
-    }
-
-    markup() {
+    template() {
         return `
           <h1>${this.data.text}!</h1>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         `;
     }
 
-    destroy() {
-        this.el.parentNode.removeChild(this.el)
+    mounted() {
+        // console.log($store)
     }
+
 }

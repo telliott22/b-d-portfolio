@@ -1,4 +1,6 @@
-# b d portfolio
+# Vanilla Javascript Component framework
+
+Toying around with vanilla javascript components to better understand how React, Vue etc work.
 
 ## Usage
 
