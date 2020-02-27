@@ -56,17 +56,35 @@ export default class Component extends EventEmitter {
         return props;
     }
 
-    // getElement() {
+    initModelListeners() {
+
+        let elementsWithModel = this.element.querySelectorAll(`[data-model]`);
+
+        elementsWithModel.forEach(element => {
+
+
+            element.addEventListener('keyup', (event) => {
+
+
+                let modelName = element.dataset.model;
+                console.log(modelName, event)
+
+                $store.update(modelName, event.target.value);
+
+
+            })
+        });
 
 
 
 
-    //     return document.querySelector(`[role=${this.name.toLowerCase()}]`);
-    // }
+
+
+    }
 
     render() {
         this.element.innerHTML = this.template();
-
+        this.initModelListeners();
         this.mounted();
     }
 

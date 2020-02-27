@@ -14,11 +14,14 @@ export default class Store extends EventEmitter {
         }
     }
 
-    dispatch() {
+    update(key, value) {
+        this.state[key] = value;
 
+        console.log(this.state);
     }
 
     commit() {
 
     }
+
 }

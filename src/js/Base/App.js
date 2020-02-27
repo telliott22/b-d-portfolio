@@ -5,12 +5,12 @@ export default class App extends EventEmitter {
 
     constructor({
         components,
-        store
+        // store
     }) {
         super()
 
         this.components = components
-        this.store = store;
+        // this.store = store;
         this.initApp()
     }
 
