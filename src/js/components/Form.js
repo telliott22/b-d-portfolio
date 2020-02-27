@@ -12,7 +12,7 @@ export default class Form extends Component {
     template() {
         return `
           <form>
-            <input data-model='test' name="testInput"> 
+            <input data-model='heroText' name="testInput"> 
           </form>
         `;
     }

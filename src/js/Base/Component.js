@@ -3,19 +3,22 @@ import EventEmitter from 'events'
 export default class Component extends EventEmitter {
 
     constructor({
+        id,
         element
     }) {
         super()
 
         this.name = this.constructor.name;
+        this.id = id;
         this.element = element
-
-        console.log(this.element);
-
         this.data = this.data();
         this.props = this.initProps();
         this.componentStore = [];
         this.render()
+        this.initModelListeners();
+        this.initBinds();
+        this.mounted();
+
     }
 
     static getComponentStore() {
@@ -62,7 +65,6 @@ export default class Component extends EventEmitter {
 
         elementsWithModel.forEach(element => {
 
-
             element.addEventListener('keyup', (event) => {
 
 
@@ -71,21 +73,27 @@ export default class Component extends EventEmitter {
 
                 $store.update(modelName, event.target.value);
 
-
             })
         });
 
+    }
 
+    initBinds() {
 
+        let boundElements = this.element.querySelectorAll(`[data-bind]`);
 
+        boundElements.forEach(element => {
 
+            let model = element.dataset.bind;
+
+            $store.updateBinds(model);
+
+        });
 
     }
 
     render() {
         this.element.innerHTML = this.template();
-        this.initModelListeners();
-        this.mounted();
     }
 
     //Function fired immediately after rendering.

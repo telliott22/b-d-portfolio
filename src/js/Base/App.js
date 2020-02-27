@@ -5,12 +5,10 @@ export default class App extends EventEmitter {
 
     constructor({
         components,
-        // store
     }) {
         super()
 
         this.components = components
-        // this.store = store;
         this.initApp()
     }
 
@@ -25,11 +23,16 @@ export default class App extends EventEmitter {
             //Itterate through and give ID to each instanciated component so we can have multiple of each type
             elements.forEach(element => {
 
-                element.dataset.id = name + new Date().getMilliseconds();
 
-                new component({
-                    element
+                let componentId = name + new Date().getMilliseconds();
+                element.dataset.id = componentId;
+
+                let instance = new component({
+                    element,
+                    id: componentId
                 });
+
+                $store.components.push(instance);
 
             });
 
