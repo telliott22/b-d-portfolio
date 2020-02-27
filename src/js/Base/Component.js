@@ -9,6 +9,7 @@ export default class Component extends EventEmitter {
         super()
 
         this.name = this.constructor.name;
+        this.lowerCaseName = this.name.toLowerCase();
         this.id = id;
         this.element = element
         this.data = this.data();
@@ -20,12 +21,17 @@ export default class Component extends EventEmitter {
 
     }
 
-
     data() {
         return {
             text: 'Hello world'
         }
     }
+
+    // initSass() {
+
+    //     import `./${this.name}.scss`;
+    //     import template from "./form.html"
+    // }
 
     initProps() {
 
@@ -59,9 +65,7 @@ export default class Component extends EventEmitter {
 
             element.addEventListener('keyup', (event) => {
 
-
                 let modelName = element.dataset.model;
-                console.log(modelName, event)
 
                 $store.update(modelName, event.target.value);
 
@@ -95,7 +99,12 @@ export default class Component extends EventEmitter {
     }
 
     template() {
-        return ``;
+
+        // // return require('/Users/tim/Code/Tim/b-d-portfolio/src/components/Form/form.html');
+
+        // let path = `../../components/${this.name}/${this.lowerCaseName}.html`;
+        // // console.log(`/src/components/${this.name}/${this.lowerCaseName}.html`)
+        // return require(path);
     }
 
     destroy() {

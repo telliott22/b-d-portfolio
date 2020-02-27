@@ -1,31 +1,14 @@
 import EventEmitter from 'events'
+import initialState from '../initialState'
 
 export default class Store extends EventEmitter {
 
     constructor() {
         super()
 
-        this.state = this.initState();
+        this.state = initialState()
         this.components = []
 
-    }
-
-
-    // set state(value) {
-
-    //     console.log('setter', value);
-
-    //     // this.state = value
-    // }
-
-    // get state() {
-
-    // }
-
-    initState() {
-        return {
-            heroText: 'Starting text'
-        }
     }
 
     update(key, value) {
@@ -34,7 +17,6 @@ export default class Store extends EventEmitter {
         this.updateBinds(key);
 
     }
-
 
     updateBinds(key) {
 
