@@ -13,7 +13,6 @@ export default class Component extends EventEmitter {
         this.element = element
         this.data = this.data();
         this.props = this.initProps();
-        this.componentStore = [];
         this.render()
         this.initModelListeners();
         this.initBinds();
@@ -21,15 +20,8 @@ export default class Component extends EventEmitter {
 
     }
 
-    static getComponentStore() {
-        return this.componentStore;
-    }
 
-    static pushToComponentStore(component) {
-        return this.componentStore.push(component);
-    }
-
-    initData() {
+    data() {
         return {
             text: 'Hello world'
         }
