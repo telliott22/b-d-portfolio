@@ -1,40 +1,31 @@
-import EventEmitter from 'events'
+import EventEmitter from "events";
+import placeholder from "../utilities/placeholder";
 
 export default class Component extends EventEmitter {
-
     constructor({
         id,
         element
     }) {
-        super()
+        super();
 
         this.name = this.constructor.name;
         this.lowerCaseName = this.name.toLowerCase();
         this.id = id;
-        this.element = element
+        this.element = element;
         this.data = this.data();
         this.props = this.initProps();
-        this.render()
-        this.initModelListeners();
-        this.initBinds();
+        this.render();
         this.mounted();
-
     }
 
     data() {
         return {
-            text: 'Hello world'
-        }
+            text: "Hello world"
+        };
     }
 
-    // initSass() {
-
-    //     import `./${this.name}.scss`;
-    //     import template from "./form.html"
-    // }
 
     initProps() {
-
         let dataSet = this.element.dataset;
 
         let props = [];
@@ -43,14 +34,13 @@ export default class Component extends EventEmitter {
             if (dataSet.hasOwnProperty(x)) {
                 const prop = dataSet[x];
 
-                if (x.indexOf('tim') === 0) {
+                if (x.indexOf("fitzroy") === 0) {
+                    let formattedKey = x.replace("fitzroy", "");
 
-                    let formattedKey = x.replace('tim', '');
-
-                    props[formattedKey[0].toLowerCase() + formattedKey.substr(1)] = prop;
-
+                    props[
+                        formattedKey[0].toLowerCase() + formattedKey.substr(1)
+                    ] = prop;
                 }
-
             }
         }
 
@@ -58,56 +48,77 @@ export default class Component extends EventEmitter {
     }
 
     initModelListeners() {
-
         let elementsWithModel = this.element.querySelectorAll(`[data-model]`);
 
         elementsWithModel.forEach(element => {
-
-            element.addEventListener('keyup', (event) => {
-
+            element.addEventListener("keyup", event => {
                 let modelName = element.dataset.model;
 
                 $store.update(modelName, event.target.value);
-
-            })
+            });
         });
-
     }
 
     initBinds() {
-
         let boundElements = this.element.querySelectorAll(`[data-bind]`);
 
         boundElements.forEach(element => {
-
             let model = element.dataset.bind;
 
             $store.updateBinds(model);
-
         });
-
     }
 
-    render() {
-        this.element.innerHTML = this.template();
+    async render() {
+        let template = await this.template();
+
+        if (!template || !template.length) {
+            console.error(
+                `FitzRoy - no template registered for ${this.name} - ${this.id}`
+            );
+        }
+
+        await this.initSass();
+
+        this.element.innerHTML = placeholder(template, {
+            props: this.props,
+            data: $store.state
+        });
+
+        //Init event listeners on component. Doing it here instead of in constructor to ensure the template has loaded 
+        this.initModelListeners();
+        this.initBinds();
+
     }
 
     //Function fired immediately after rendering.
-    mounted() {
+    mounted() {}
 
+    //Import html file from default location. Can override in instanciated component
+    async template() {
+        let template = await System.import(
+            `../../components/${this.name}/${this.lowerCaseName}.html`
+        ).then(function (templateImport) {
+            return templateImport.default;
+        });
 
+        return template;
     }
 
-    template() {
 
-        // // return require('/Users/tim/Code/Tim/b-d-portfolio/src/components/Form/form.html');
+    async initSass() {
 
-        // let path = `../../components/${this.name}/${this.lowerCaseName}.html`;
-        // // console.log(`/src/components/${this.name}/${this.lowerCaseName}.html`)
-        // return require(path);
+        // let sass = await System.import(
+        //     `../../components/${this.name}/${this.lowerCaseName}.scss`
+        // ).then(function (sass) {
+        //     console.log(sass)
+        //     return sass
+        // });
+        // // import `./${this.name}.scss`;
+        // // import template from "./form.html"
     }
 
     destroy() {
-        this.el.parentNode.removeChild(this.el)
+        this.el.parentNode.removeChild(this.el);
     }
 }

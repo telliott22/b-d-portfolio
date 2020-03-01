@@ -1,25 +1,26 @@
 module.exports = {
-    entry: __dirname + '/src/js/app.js',
+    entry: ["babel-polyfill", __dirname + "/src/js/app.js"],
     output: {
-        path: __dirname + '/dist',
-        publicPath: '/dist/',
-        filename: 'bundle.js'
+        path: __dirname + "/dist",
+        publicPath: "/dist/",
+        filename: "bundle.js"
     },
     module: {
-        rules: [{
+        rules: [
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: 'babel-loader'
+                use: "babel-loader"
             },
             {
                 test: /\.(s*)css$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
+                use: ["style-loader", "css-loader", "sass-loader"]
             },
             {
                 test: /\.html$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'html-loader'
+                    loader: "html-loader"
                 }
             }
         ]

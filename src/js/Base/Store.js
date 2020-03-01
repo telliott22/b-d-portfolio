@@ -13,6 +13,7 @@ export default class Store extends EventEmitter {
 
     update(key, value) {
 
+        console.log(key);
         this.state[key] = value;
         this.updateBinds(key);
 
