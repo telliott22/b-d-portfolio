@@ -10,7 +10,4 @@ export default class Form extends Component {
         };
     }
 
-    mounted() {
-        // console.log($store)
-    }
 }

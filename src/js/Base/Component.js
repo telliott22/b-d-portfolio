@@ -8,6 +8,8 @@ export default class Component extends EventEmitter {
     }) {
         super();
 
+        this.template = "";
+        this.binds = [];
         this.name = this.constructor.name;
         this.lowerCaseName = this.name.toLowerCase();
         this.id = id;
@@ -59,18 +61,32 @@ export default class Component extends EventEmitter {
         });
     }
 
-    initBinds() {
-        let boundElements = this.element.querySelectorAll(`[data-bind]`);
+    async initBinds() {
 
-        boundElements.forEach(element => {
-            let model = element.dataset.bind;
 
-            $store.updateBinds(model);
+        let regexp = /{{data.*}}/g;
+        let match;
+
+        //Get data binds in this component
+        while ((match = regexp.exec(this.template)) != null) {
+
+            let formattedMatch = match[0].replace('{{data.', '').replace('}}', '');
+
+            this.binds.push(formattedMatch);
+        }
+
+        //When a bind changes, if it's on this component rerender
+        $store.on('updatedState', (key) => {
+
+            if (this.binds.indexOf(key) > -1) {
+                this.reRender();
+            }
+
         });
     }
 
     async render() {
-        let template = await this.template();
+        let template = this.template || await this.getTemplate();
 
         if (!template || !template.length) {
             console.error(
@@ -87,20 +103,29 @@ export default class Component extends EventEmitter {
 
         //Init event listeners on component. Doing it here instead of in constructor to ensure the template has loaded 
         this.initModelListeners();
-        this.initBinds();
+        await this.initBinds();
 
+    }
+
+    async reRender() {
+        this.element.innerHTML = placeholder(this.template, {
+            props: this.props,
+            data: $store.state
+        });
     }
 
     //Function fired immediately after rendering.
     mounted() {}
 
     //Import html file from default location. Can override in instanciated component
-    async template() {
+    async getTemplate() {
         let template = await System.import(
             `../../components/${this.name}/${this.lowerCaseName}.html`
         ).then(function (templateImport) {
             return templateImport.default;
         });
+
+        this.template = template;
 
         return template;
     }

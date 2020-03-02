@@ -12,7 +12,7 @@ export default class App extends EventEmitter {
         this.initApp()
     }
 
-    initComponents() {
+    async initComponents() {
 
         this.components.forEach(component => {
 
@@ -22,7 +22,6 @@ export default class App extends EventEmitter {
 
             //Itterate through and give ID to each instanciated component so we can have multiple of each type
             elements.forEach(element => {
-
 
                 let componentId = name + new Date().getMilliseconds();
                 element.dataset.id = componentId;
@@ -40,8 +39,8 @@ export default class App extends EventEmitter {
 
     }
 
-    initApp() {
-        this.initComponents();
+    async initApp() {
+        await this.initComponents();
     }
 
 }

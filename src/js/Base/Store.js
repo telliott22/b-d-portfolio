@@ -13,19 +13,10 @@ export default class Store extends EventEmitter {
 
     update(key, value) {
 
-        console.log(key);
         this.state[key] = value;
-        this.updateBinds(key);
 
-    }
-
-    updateBinds(key) {
-
-        let elements = document.querySelectorAll(`[data-bind=${key}]`);
-
-        elements.forEach(element => {
-            element.textContent = $store.state[key]
-        });
+        //Fire event to re render components that have this value
+        $store.emit('updatedState', key);
 
     }
 
