@@ -9,5 +9,10 @@ export default class Hero extends Component {
         };
     }
 
-    mounted() {}
+    mounted() {
+
+        console.log($store);
+        console.log(this.localData);
+
+    }
 }

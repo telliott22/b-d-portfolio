@@ -14,10 +14,26 @@ export default class Component extends EventEmitter {
         this.lowerCaseName = this.name.toLowerCase();
         this.id = id;
         this.element = element;
-        this.data = this.data();
+
+        this.initLocalData();
+
         this.props = this.initProps();
         this.render();
         this.mounted();
+    }
+
+    //Make computed 
+    get localData() {
+        return $store[this.id];
+    }
+
+    // set data(key) {
+    //     $store[this.id][key] = value;
+    // }
+
+    //Save local data 
+    initLocalData() {
+        $store[this.id] = this.data();
     }
 
     data() {
@@ -62,7 +78,6 @@ export default class Component extends EventEmitter {
     }
 
     async initBinds() {
-
 
         let regexp = /{{data.*}}/g;
         let match;
