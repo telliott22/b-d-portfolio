@@ -5,11 +5,20 @@ export default class App extends EventEmitter {
 
     constructor({
         components,
+        options = {
+            debug: false
+        }
     }) {
         super()
 
         this.components = components
         this.initApp()
+
+        this.options = options;
+        
+        //Set debug mode 
+        window.debug = this.options.debug 
+        
     }
 
     async initComponents() {
